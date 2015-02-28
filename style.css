@@ -1,3 +1,14 @@
+.display {
+  border: 1px solid black;
+  height: 50px;
+  width: 200px;
+}
+
+.keypad button {
+  width: 40px;
+  height: 40px;
+}
+
 #answer {
 	height: 50px;
 	width: 200px;
