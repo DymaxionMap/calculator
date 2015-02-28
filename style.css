@@ -1,0 +1,56 @@
+#answer {
+	height: 50px;
+	width: 200px;
+	border: 2px solid black;
+	font-size: 25px;
+	padding-left: 20px;
+	padding-top: 20px;
+}
+
+#numpad {
+	float: left;
+}
+
+#numpad td {
+	margin: 10px;
+	color: #ffffff;
+	background-color: #F7391B;
+	border-radius: 4px;
+	display: inline-block;
+    cursor: pointer;
+}
+
+#numpad td:hover {
+    background-color: #F55D45;
+}
+
+#ops {
+	float: left;
+}
+
+#ops td {
+	margin: 10px;
+	color: #ffffff;
+	background-color: #960F0F;
+	border-radius: 4px;
+	display: inline-block;
+    cursor: pointer;
+}
+
+#ops td:hover {
+    background-color: #A13B3B;
+}
+
+td {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 20px;
+    height: 20px;
+    width: 22px;
+}
+
+h1 {
+    font-size: 30px;
+    font-family: 'Big Casalon', 'Book Antiqua', 'Palatino Linotype'
+        , Georgia, serif;
+}
