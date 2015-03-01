@@ -1,9 +1,10 @@
-var Calculator = function() {
+var Calculator = function($display) {
   this.x = 0;
   this.y = 0;
   this.buffer = [];
   this.operation = null;
   this.expectSecondOperand = false;
+  this.$display = $display;
   console.log("Created calculator.");
 }
 
@@ -59,8 +60,8 @@ Calculator.prototype.calculate = function() {
   }
 }
 
-Calculator.prototype.display = function($display) {
-  $display.text(this.x);
+Calculator.prototype.display = function() {
+  this.$display.text(this.x);
 };
 
 Calculator.prototype.clearBuffer = function() {
@@ -68,9 +69,8 @@ Calculator.prototype.clearBuffer = function() {
 };
 
 $(document).ready(function() {
-  var calc = new Calculator();
-  var $display = $(".display");
-  calc.display($display);
+  var calc = new Calculator($(".display"));
+  calc.display();
   console.log(calc.buffer);
   console.log(Object.getOwnPropertyNames(calc));
 
@@ -79,7 +79,7 @@ $(document).ready(function() {
     if (calc.noDuplicateDots(digit)) {
       calc.addToBuffer(digit);
       calc.parseBuffer();
-      calc.display($display);
+      calc.display();
     }
     logState(calc);
     calc.expectSecondOperand = false;
@@ -87,7 +87,7 @@ $(document).ready(function() {
 
   $(".keypad").on("click", "#clear", function() {
     calc.clear();
-    calc.display($display);
+    calc.display();
     calc.expectSecondOperand = false;
   });
 
@@ -101,7 +101,7 @@ $(document).ready(function() {
       calc.storeOperation($(this).data("value"));
       logState(calc);
       calc.clearBuffer();
-      calc.display($display);
+      calc.display();
       calc.expectSecondOperand = true;
     }
   });
@@ -115,7 +115,7 @@ $(document).ready(function() {
     } else {
       calc.calculate();
       logState(calc);
-      calc.display($display);
+      calc.display();
       calc.push();
       logState(calc);
       calc.clearBuffer();
@@ -123,9 +123,9 @@ $(document).ready(function() {
   });
 
   function logState(calc) {
-      console.log("x: " + calc.x + ", y: " + calc.y +
-          ", operation: " + calc.operation + ", buffer: " +
-          calc.buffer + ", expectSecondOperand: " +
-          calc.expectSecondOperand);
+    console.log("x: " + calc.x + ", y: " + calc.y +
+        ", operation: " + calc.operation + ", buffer: " +
+        calc.buffer + ", expectSecondOperand: " +
+        calc.expectSecondOperand);
   }
 });
