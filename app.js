@@ -11,20 +11,17 @@ Calculator.prototype.addToBuffer = function (digit) {
   this.buffer.push(digit);
 };
 
-// Add these in next commit:
-/*
 Calculator.prototype.parseBuffer = function() {
   if (this.buffer.length === 1 && this.buffer[0] === ".") {
     this.x = 0;
   } else {
-    this.x =  Number(buffer.join(""));
+    this.x =  Number(this.buffer.join(""));
   }
 };
 
 Calculator.prototype.display = function(display) {
-  display.text(x);
+  display.text(this.x);
 };
-*/
 
 $(document).ready(function() {
   var calc = new Calculator();
@@ -35,7 +32,7 @@ $(document).ready(function() {
     var digit = $(this).data("value");
     calc.addToBuffer(digit);
     console.log(calc.buffer);
-    //calc.parseBuffer();
-    //calc.display();
+    calc.parseBuffer();
+    calc.display($(".display"));
   });
 });
