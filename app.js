@@ -65,6 +65,15 @@ Calculator.prototype.clearBuffer = function() {
   this.buffer = [];
 };
 
+Calculator.prototype.error = function() {
+  this.clear();
+  this.$display.text("Error!");
+}
+
+Calculator.prototype.divideByZero = function() {
+  return Math.abs(this.x) === Infinity;
+}
+
 $(document).ready(function() {
   var calc = new Calculator($(".display"));
   calc.display();
@@ -91,8 +100,8 @@ $(document).ready(function() {
 
   $(".keypad").on("click", ".binary-op", function() {
     if (calc.expectSecondOperand) {
-      // Placeholder error.
       console.log("There was an error.");
+      calc.error();
     } else {
       if (!calc.usePreviousAnswer) {
         calc.push();
@@ -108,24 +117,26 @@ $(document).ready(function() {
   $(".keypad").on("click", ".equals", function() {
     console.log("In equals");
     if (calc.expectSecondOperand) {
-      // Placeholder error.
       console.log("There was an error.");
-      calc.expectSecondOperand = false;
+      calc.error();
     } else {
       calc.calculate();
-      logState(calc);
-      calc.display();
-      calc.push();
-      logState(calc);
-      calc.clearBuffer();
-      calc.usePreviousAnswer = true;
+      if (calc.divideByZero()) {
+        calc.error();
+      } else {
+        logState(calc);
+        calc.display();
+        calc.push();
+        logState(calc);
+        calc.clearBuffer();
+        calc.usePreviousAnswer = true;
+      }
     }
+    calc.expectSecondOperand = false;
   });
 
   function logState(calc) {
-    console.log("x: " + calc.x + ", y: " + calc.y +
-        ", operation: " + calc.operation + ", buffer: " +
-        calc.buffer + ", expectSecondOperand: " +
-        calc.expectSecondOperand);
+    console.log(calc);
+    console.log(calc.buffer);
   }
 });
