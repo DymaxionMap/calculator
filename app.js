@@ -11,6 +11,14 @@ Calculator.prototype.addToBuffer = function (digit) {
   this.buffer.push(digit);
 };
 
+Calculator.prototype.noDuplicateDots = function (digit) {
+  if (digit === ".") {
+    return (this.buffer.indexOf(".") === -1);
+  } else {
+    return true;
+  }
+};
+
 Calculator.prototype.parseBuffer = function() {
   if (this.buffer.length === 1 && this.buffer[0] === ".") {
     this.x = 0;
@@ -30,9 +38,11 @@ $(document).ready(function() {
 
   $(".keypad").on("click", ".digit", function() {
     var digit = $(this).data("value");
-    calc.addToBuffer(digit);
-    console.log(calc.buffer);
-    calc.parseBuffer();
-    calc.display($(".display"));
+    if (calc.noDuplicateDots(digit)) {
+      calc.addToBuffer(digit);
+      console.log(calc.buffer);
+      calc.parseBuffer();
+      calc.display($(".display"));
+    }
   });
 });
