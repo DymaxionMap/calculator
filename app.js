@@ -3,6 +3,7 @@ var Calculator = function() {
   this.y = 0;
   this.buffer = [];
   this.operation = null;
+  this.expectSecondOperand = false;
   console.log("Created calculator.");
 }
 
@@ -32,8 +33,38 @@ Calculator.prototype.parseBuffer = function() {
   }
 };
 
+Calculator.prototype.push = function() {
+  this.y = this.x;
+  this.x = 0;
+}
+
+Calculator.prototype.storeOperation = function(operation) {
+  this.operation = operation;
+}
+
+Calculator.prototype.calculate = function() {
+  switch (this.operation) {
+    case "add":
+      this.x = this.y + this.x;
+      break;
+    case "subtract":
+      this.x = this.y - this.x;
+      break;
+    case "multiply":
+      this.x = this.y * this.x;
+      break;
+    case "divide":
+      this.x = this.y / this.x;
+      break;
+  }
+}
+
 Calculator.prototype.display = function($display) {
   $display.text(this.x);
+};
+
+Calculator.prototype.clearBuffer = function() {
+  this.buffer = [];
 };
 
 $(document).ready(function() {
@@ -51,10 +82,39 @@ $(document).ready(function() {
       calc.parseBuffer();
       calc.display($display);
     }
+    calc.expectSecondOperand = false;
+    console.log("x: " + calc.x + ", y: " + calc.y);
   });
 
   $(".keypad").on("click", "#clear", function() {
     calc.clear();
     calc.display($display);
+    calc.expectSecondOperand = false;
   });
+
+  $(".keypad").on("click", ".binary-op", function() {
+    calc.push();
+    console.log("x: " + calc.x + ", y: " + calc.y);
+    calc.storeOperation($(this).data("value"));
+    console.log(calc.operation);
+    calc.clearBuffer();
+    calc.display($display);
+    calc.expectSecondOperand = true;
+  });
+
+  // Add this in next commit.
+  /*
+  $(".keypad").on("click", "#equals", function() {
+    console.log("In equals");
+    if (calc.expectSecondOperand) {
+      // Display error.
+      calc.expectSecondOperand = false;
+    } else {
+      calc.calculate();
+      calc.display($display);
+      calc.push();
+      calc.clearBuffer();
+    }
+  });
+  */
 });
