@@ -102,19 +102,19 @@ $(document).ready(function() {
     calc.expectSecondOperand = true;
   });
 
-  // Add this in next commit.
-  /*
-  $(".keypad").on("click", "#equals", function() {
+  $(".keypad").on("click", ".equals", function() {
     console.log("In equals");
     if (calc.expectSecondOperand) {
-      // Display error.
+      // Placeholder error.
+      console.log("There was an error.");
       calc.expectSecondOperand = false;
     } else {
       calc.calculate();
+      console.log("x: " + calc.x + ", y: " + calc.y);
       calc.display($display);
       calc.push();
+      console.log("x: " + calc.x + ", y: " + calc.y);
       calc.clearBuffer();
     }
   });
-  */
 });
