@@ -29,10 +29,9 @@ Calculator.prototype.noDuplicateDots = function (digit) {
 
 Calculator.prototype.parseBuffer = function() {
   if (this.buffer.length === 1 && this.buffer[0] === ".") {
-    this.x = 0;
-  } else {
-    this.x =  Number(this.buffer.join(""));
+    this.buffer.unshift("0");
   }
+  this.x =  Number(this.buffer.join(""));
 };
 
 Calculator.prototype.push = function() {
@@ -74,6 +73,14 @@ Calculator.prototype.divideByZero = function() {
   return Math.abs(this.x) === Infinity;
 }
 
+Calculator.prototype.flipSign = function() {
+  if (this.buffer[0] === "-") {
+    this.buffer.shift();
+  } else {
+    this.buffer.unshift("-");
+  }
+};
+
 $(document).ready(function() {
   var calc = new Calculator($(".display"));
   calc.display();
@@ -96,6 +103,7 @@ $(document).ready(function() {
     calc.clear();
     calc.display();
     calc.expectSecondOperand = false;
+    calc.usePreviousAnswer = false;
   });
 
   $(".keypad").on("click", ".binary-op", function() {
@@ -133,6 +141,12 @@ $(document).ready(function() {
       }
     }
     calc.expectSecondOperand = false;
+  });
+
+  $(".keypad").on("click", ".flip-sign", function() {
+    calc.flipSign();
+    calc.parseBuffer();
+    calc.display();
   });
 
   function logState(calc) {
