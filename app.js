@@ -4,6 +4,7 @@ var Calculator = function($display) {
   this.buffer = [];
   this.operation = null;
   this.expectSecondOperand = false;
+  this.usePreviousAnswer = false;
   this.$display = $display;
   console.log("Created calculator.");
 }
@@ -37,10 +38,6 @@ Calculator.prototype.parseBuffer = function() {
 Calculator.prototype.push = function() {
   this.y = this.x;
   this.x = 0;
-}
-
-Calculator.prototype.storeOperation = function(operation) {
-  this.operation = operation;
 }
 
 Calculator.prototype.calculate = function() {
@@ -83,6 +80,7 @@ $(document).ready(function() {
     }
     logState(calc);
     calc.expectSecondOperand = false;
+    calc.usePreviousAnswer = false;
   });
 
   $(".keypad").on("click", "#clear", function() {
@@ -96,12 +94,13 @@ $(document).ready(function() {
       // Placeholder error.
       console.log("There was an error.");
     } else {
-      calc.push();
+      if (!calc.usePreviousAnswer) {
+        calc.push();
+      }
       logState(calc);
-      calc.storeOperation($(this).data("value"));
+      calc.operation = $(this).data("value");
       logState(calc);
       calc.clearBuffer();
-      calc.display();
       calc.expectSecondOperand = true;
     }
   });
@@ -119,6 +118,7 @@ $(document).ready(function() {
       calc.push();
       logState(calc);
       calc.clearBuffer();
+      calc.usePreviousAnswer = true;
     }
   });
 
