@@ -78,12 +78,11 @@ $(document).ready(function() {
     var digit = $(this).data("value");
     if (calc.noDuplicateDots(digit)) {
       calc.addToBuffer(digit);
-      console.log(calc.buffer);
       calc.parseBuffer();
       calc.display($display);
     }
+    logState(calc);
     calc.expectSecondOperand = false;
-    console.log("x: " + calc.x + ", y: " + calc.y);
   });
 
   $(".keypad").on("click", "#clear", function() {
@@ -93,13 +92,18 @@ $(document).ready(function() {
   });
 
   $(".keypad").on("click", ".binary-op", function() {
-    calc.push();
-    console.log("x: " + calc.x + ", y: " + calc.y);
-    calc.storeOperation($(this).data("value"));
-    console.log(calc.operation);
-    calc.clearBuffer();
-    calc.display($display);
-    calc.expectSecondOperand = true;
+    if (calc.expectSecondOperand) {
+      // Placeholder error.
+      console.log("There was an error.");
+    } else {
+      calc.push();
+      logState(calc);
+      calc.storeOperation($(this).data("value"));
+      logState(calc);
+      calc.clearBuffer();
+      calc.display($display);
+      calc.expectSecondOperand = true;
+    }
   });
 
   $(".keypad").on("click", ".equals", function() {
@@ -110,11 +114,18 @@ $(document).ready(function() {
       calc.expectSecondOperand = false;
     } else {
       calc.calculate();
-      console.log("x: " + calc.x + ", y: " + calc.y);
+      logState(calc);
       calc.display($display);
       calc.push();
-      console.log("x: " + calc.x + ", y: " + calc.y);
+      logState(calc);
       calc.clearBuffer();
     }
   });
+
+  function logState(calc) {
+      console.log("x: " + calc.x + ", y: " + calc.y +
+          ", operation: " + calc.operation + ", buffer: " +
+          calc.buffer + ", expectSecondOperand: " +
+          calc.expectSecondOperand);
+  }
 });
