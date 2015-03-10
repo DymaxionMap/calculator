@@ -99,7 +99,7 @@ $(document).ready(function() {
     calc.usePreviousAnswer = false;
   });
 
-  $(".keypad").on("click", "#clear", function() {
+  $(".keypad").on("click", ".clear", function() {
     calc.clear();
     calc.display();
     calc.expectSecondOperand = false;
