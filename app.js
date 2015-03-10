@@ -1,3 +1,4 @@
+// Calculator constructor.
 var Calculator = function($display) {
   this.x = 0;
   this.y = 0;
@@ -9,16 +10,19 @@ var Calculator = function($display) {
   console.log("Created calculator.");
 }
 
+// Clear values from memory.
 Calculator.prototype.clear = function() {
   this.x = 0;
   this.y = 0;
   this.buffer = [];
 };
 
+// Insert a digit character to the buffer.
 Calculator.prototype.addToBuffer = function (digit) {
   this.buffer.push(digit);
 };
 
+// If digit is a dot, check if there is already a dot in the buffer.
 Calculator.prototype.noDuplicateDots = function (digit) {
   if (digit === ".") {
     return (this.buffer.indexOf(".") === -1);
@@ -27,6 +31,7 @@ Calculator.prototype.noDuplicateDots = function (digit) {
   }
 };
 
+// Convert the buffer of characters into a number.
 Calculator.prototype.parseBuffer = function() {
   if (this.buffer.length === 1 && this.buffer[0] === ".") {
     this.buffer.unshift("0");
@@ -34,11 +39,13 @@ Calculator.prototype.parseBuffer = function() {
   this.x =  Number(this.buffer.join(""));
 };
 
+// Save current value and prepare for new input.
 Calculator.prototype.push = function() {
   this.y = this.x;
   this.x = 0;
 }
 
+// Perform the binary operation.
 Calculator.prototype.calculate = function() {
   switch (this.operation) {
     case "add":
@@ -56,23 +63,28 @@ Calculator.prototype.calculate = function() {
   }
 }
 
+// Display current value.
 Calculator.prototype.display = function() {
   this.$display.text(this.x);
 };
 
+// Clear buffer.
 Calculator.prototype.clearBuffer = function() {
   this.buffer = [];
 };
 
+// Display error and clear memory.
 Calculator.prototype.error = function() {
   this.clear();
   this.$display.text("Error!");
 }
 
+// Test for divide by zero error.
 Calculator.prototype.divideByZero = function() {
   return Math.abs(this.x) === Infinity;
 }
 
+// Change the sign of the current value.
 Calculator.prototype.flipSign = function() {
   if (this.buffer[0] === "-") {
     this.buffer.shift();
@@ -81,12 +93,16 @@ Calculator.prototype.flipSign = function() {
   }
 };
 
+// Main code.
 $(document).ready(function() {
+
+  // Initialize calculator.
   var calc = new Calculator($(".display"));
   calc.display();
   console.log(calc.buffer);
   console.log(Object.getOwnPropertyNames(calc));
 
+  // Read input when user clicks on a digit key.
   $(".keypad").on("click", ".digit", function() {
     var digit = $(this).data("value");
     if (calc.noDuplicateDots(digit)) {
@@ -99,6 +115,7 @@ $(document).ready(function() {
     calc.usePreviousAnswer = false;
   });
 
+  // Clear values when user clicks the 'C' key.
   $(".keypad").on("click", ".clear", function() {
     calc.clear();
     calc.display();
@@ -106,6 +123,7 @@ $(document).ready(function() {
     calc.usePreviousAnswer = false;
   });
 
+  // Set up a binary operation.
   $(".keypad").on("click", ".binary-op", function() {
     if (calc.expectSecondOperand) {
       console.log("There was an error.");
@@ -122,6 +140,7 @@ $(document).ready(function() {
     }
   });
 
+  // Compute answer when equals key is clicked.
   $(".keypad").on("click", ".equals", function() {
     console.log("In equals");
     if (calc.expectSecondOperand) {
@@ -143,12 +162,14 @@ $(document).ready(function() {
     calc.expectSecondOperand = false;
   });
 
+  // Change sign of current value.
   $(".keypad").on("click", ".flip-sign", function() {
     calc.flipSign();
     calc.parseBuffer();
     calc.display();
   });
 
+  // Log properties for debugging.
   function logState(calc) {
     console.log(calc);
     console.log(calc.buffer);
