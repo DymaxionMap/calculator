@@ -93,12 +93,20 @@ Calculator.prototype.flipSign = function() {
   }
 };
 
+// Resize text
+Calculator.prototype.resize = function() {
+  var fontSize = parseInt(this.$display.parent().width())
+  scalefactor = 0.09;
+  this.$display.css('font-size', fontSize*scalefactor + "px");
+};
+
 // Main code.
 $(document).ready(function() {
 
   // Initialize calculator.
   var calc = new Calculator($(".display"));
   calc.display();
+  calc.resize();
   console.log(calc.buffer);
   console.log(Object.getOwnPropertyNames(calc));
 
@@ -167,6 +175,11 @@ $(document).ready(function() {
     calc.flipSign();
     calc.parseBuffer();
     calc.display();
+  });
+
+  // Resize display text when window is resized.
+  $(window).on("resize", function() {
+    calc.resize();
   });
 
   // Log properties for debugging.
